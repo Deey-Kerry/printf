@@ -11,8 +11,8 @@
  * @size: size of function
  * Return: chars
  */
-int print_char(va_list types, char buffer[], int flags,
-		int width, int precision, int size)
+int print_char(va_list types, char buffer[], 
+		int flags, int width, int precision, int size)
 {
 	char x = va_arg(types, int);
 
@@ -28,8 +28,8 @@ int print_char(va_list types, char buffer[], int flags,
  * @size: size of function
  * Return: string
  */
-int print_string(va_list types, char buffer[], int flags,
-		int width, int precision, int size)
+int print_string(va_list types, char buffer[],
+		int flags, int width, int precision, int size)
 {
 	char *str = va_arg(types, char *);
 	int k = 0;
@@ -82,8 +82,8 @@ int print_string(va_list types, char buffer[], int flags,
  * @size: size of function
  * Return: percent
  */
-int print_percent(va_list types, char buffer[], int flags,
-		int width, int precision, int size)
+int print_percent(va_list types, char buffer[],
+	       int flags, int width, int precision, int size)
 {
 	UNUSED(width);
 	UNUSED(precision);
@@ -104,8 +104,8 @@ int print_percent(va_list types, char buffer[], int flags,
  * @size: size of function
  * Return: integer
  */
-int print_int(va_list types, char buffer[], int flags,
-		int width, int precision, int size)
+int print_int(va_list types, char buffer[],
+		int flags, int width, int precision, int size)
 {
 	long int h = va_arg(types, long int);
 	unsigned long int len;
@@ -120,11 +120,10 @@ int print_int(va_list types, char buffer[], int flags,
 	buffer[BUFF_SIZE - 1] = '\0';
 	len = (unsigned long int)h;
 
-	while (h < 0)
+	if (h < 0)
 	{
 		len = (unsigned long int)((-1) * h);
 		is_negative = 1;
-		break;
 	}
 	while (len > 0)
 	{
@@ -146,8 +145,8 @@ int print_int(va_list types, char buffer[], int flags,
  * @size: size of function
  * Return: binary
  */
-int print_binary(va_list types, char buffer[], int flags,
-		int width, int precision, int size)
+int print_binary(va_list types, char buffer[],
+		int flags, int width, int precision, int size)
 {
 	int count;
 	unsigned int g, h, i, add;

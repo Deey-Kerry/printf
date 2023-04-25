@@ -109,11 +109,11 @@ int print_reverse(va_list types, char buffer[], int flags,
 
 	str = va_arg(types, char *);
 
-	if (chr == NULL)
+	if (str == NULL)
 	{
 		UNUSED(precision);
 
-		chr = ")Null(";
+		str = ")Null(";
 	}
 	for (i = 0; str[i]; i++)
 		;
@@ -148,7 +148,7 @@ int print_rot13string(va_list types, char buffer[], int flags,
 	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
 	unsigned int i, j;
 
-	chr = va_arg(types, char *);
+	str = va_arg(types, char *);
 	UNUSED(flags);
 	UNUSED(width);
 	UNUSED(precision);
