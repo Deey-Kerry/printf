@@ -20,7 +20,7 @@ int _printf(const char *format, ...)
 		return (-1);
 	va_start(list, format);
 
-	int j = 0;
+	j = 0;
 
 	while (format[j] != '\0')
 	{
@@ -50,7 +50,7 @@ int _printf(const char *format, ...)
 
 	print_buffer(buffer, &buff_ind);
 
-	a_end(list);
+	va_end(list);
 
 	return (printed_chars);
 }

@@ -143,21 +143,11 @@ int print_hexa(va_list types, char map_to[], char buffer[],
 	buffer[BUFF_SIZE - 1] = '\0';
 
 	/* LOOP that Count the number of hexadecimal digits */
-	int num_digits = 0;
-	unsigned long int temp = num;
-
-	while (temp > 0)
-	{
-		num_digits++;
-		temp /= 16;
-	}
-	/* loop that Iterate over the digits in reverse order */
-	for (int j = num_digits - 1; j >= 0; j--)
+	while (num > 0)
 	{
 		buffer[j--] = map_to[num % 16];
 		num /= 16;
 	}
-
 	if (flags & F_HASH && init_num != 0)
 	{
 		buffer[j--] = flag_ch;
