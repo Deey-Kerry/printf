@@ -9,7 +9,9 @@
  */
 int is_printable(char c)
 {
-	return (c >= 32 && c <= 126);
+	if (c >= 32 && c <= 126)
+		return (1);
+	return (0);
 }
 /**
  * append_hexa_code - two decimal numbers

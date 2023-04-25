@@ -14,8 +14,8 @@
  * @size: size of function
  * Return: pointer value
  */
-int print_pointer(va_list types, char buffer[], int flags,
-int width, int precision, int size)
+int print_pointer(va_list types, char buffer[],
+		int flags, int width, int precision, int size)
 {
 	unsigned long base_len;
 	void *len = va_arg(types, void *);
@@ -62,8 +62,8 @@ int width, int precision, int size)
  * @size: size of function
  * Return: non-printable character
  */
-int print_non_printable(va_list types, char buffer[], int flags,
-int width, int precision, int size)
+int print_non_printable(va_list types, char buffer[], 
+		int flags, int width, int precision, int size)
 {
 	char *str = va_arg(types, char *);
 	int i = 0, offset = 0;
@@ -98,8 +98,8 @@ int width, int precision, int size)
  * @size: size of function
  * Return: reverse
  */
-int print_reverse(va_list types, char buffer[], int flags,
-int width, int precision, int size)
+int print_reverse(va_list types, char buffer[],
+		int width, int flags, int precision, int size)
 {
 	char *chr;
 	int i, count = 0;
@@ -140,8 +140,8 @@ int width, int precision, int size)
  * @size: size of function
  * Return: rot13 string
  */
-int print_rot13string(va_list types, char buffer[], int flags,
-int width, int precision, int size)
+int print_rot13string(va_list types, char buffer[],
+		int width, int precision, int flags, int size)
 {
 	int count = 0;
 	char a;

@@ -10,10 +10,10 @@
  * @list: list of arguments of tthe function
  * Return: precision
  */
-int get_precision(const char *format, int *i, va_list list)
+int get_precision(const char *format, int *m, va_list list)
 {
 	int p = -1;
-	int cx_m = *i + 1;
+	int cx_m = *m + 1;
 
 	if (format[cx_m] == '.')
 	{
@@ -41,7 +41,7 @@ int get_precision(const char *format, int *i, va_list list)
 		else
 			break;
 	}
-	*i = cx_m - 1;
+	*m = cx_m - 1;
 
 	return (p);
 }
