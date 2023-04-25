@@ -31,7 +31,7 @@ int print_char(va_list types, char buffer[], int flags,
 int print_string(va_list types, char buffer[], int flags,
 		int width, int precision, int size)
 {
-	char *chr = va_arg(types, char *);
+	char *str = va_arg(types, char *);
 	int k = 0;
 	int i;
 
@@ -41,14 +41,12 @@ int print_string(va_list types, char buffer[], int flags,
 	UNUSED(size);
 	UNUSED(flags);
 
-	if (!chr)
+	if (!str)
 	{
-		chr = precision >= 6 ? "      " : "(null)";
+		str = precision >= 6 ? "      " : "(null)";
 	}
-
-	while (chr[k] != '\0')
+	while (str[k] != '\0')
 		k++;
-
 	if (precision >= 0)
 	{
 		k = (precision < k) ? precision : k;
@@ -59,18 +57,20 @@ int print_string(va_list types, char buffer[], int flags,
 	{
 		if (flags & F_MINUS)
 		{
-			write(1, &chr[0], k);
-			i = width - k;
+			write(1, &str[0], k);
+			for (i = width - k; i > 0; i--)
+				write(1, " ", 1);
+			return (width);
 		}
 		else
+		{
 			i = width - k;
-		while (i-- > 0)
-			write(1, " ", 1);
-		if (flags & F_MINUS)
+			for (i = width - k; i > 0; i--)
+				write(1, " ", 1);
+			write(1, &str[0], k);
 			return (width);
-	}
-
-	return (write(1, chr, k));
+		}
+	} return (write(1, str, k));
 }
 /**
  * print_percent - a function that prints a percent
