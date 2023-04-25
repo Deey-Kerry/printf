@@ -17,10 +17,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-int is_printable(char);
-int append_hexa_code(char, char[], int);
-int is_digit(char);
-
 /**
  * UTILS
  */
