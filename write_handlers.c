@@ -90,8 +90,8 @@ int write_number(int is_negative, int ind, char buffer[],
  * Return: Number of printed characters.
  */
 int write_num(int ind, char buffer[],
-		int length, char padd, char extra_c,
-		int flags, int width, int prec)
+		int flags, int width, int prec,
+		int length, char padd, char extra_c)
 {
 	int i, padd_start = 1;
 

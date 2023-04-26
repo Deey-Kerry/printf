@@ -20,7 +20,7 @@ int _printf(const char *format, ...)
 		return (-1);
 	va_start(list, format);
 
-	int i = 0;
+	i = 0;
 
 	while (format[i] != '\0')
 
@@ -39,7 +39,7 @@ int _printf(const char *format, ...)
 			width = get_width(format, &i, list);
 			precision = get_precision(format, &i, list);
 			size = get_size(format, &i);
-			++j;
+			++i;
 			printed = handle_print(format, &i, list, buffer,
 					flags, width, precision, size);
 			if (printed == -1)
@@ -51,7 +51,7 @@ int _printf(const char *format, ...)
 
 	print_buffer(buffer, &buff_ind);
 
-	a_end(list);
+	va_end(list);
 
 	return (printed_chars);
 }

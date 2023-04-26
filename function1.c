@@ -72,7 +72,7 @@ int print_octal(va_list types, char buffer[],
 	if (flags & F_HASH && init_num != 0)
 		buffer[i--] = '0';
 
-	I++;
+	i++;
 
 	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
 }
@@ -134,7 +134,7 @@ int print_hexa_upper(va_list types, char buffer[],
 int print_hexa(va_list types, char map_to[], char buffer[],
 		int flags, char flag_ch, int width, int precision, int size)
 {
-	int I = BUFF_SIZE - 2;
+	int i = BUFF_SIZE - 2;
 	unsigned long int num = va_arg(types, unsigned long int);
 	unsigned long int init_num = num;
 
@@ -147,23 +147,11 @@ int print_hexa(va_list types, char map_to[], char buffer[],
 
 	buffer[BUFF_SIZE - 1] = '\0';
 
-	/* LOOP that Count the number of hexadecimal digits */
-	int num_digits = 0;
-	unsigned long int temp = num;
-
-	while (temp > 0)
+	while (num > 0)
 	{
-		num_digits++;
-		temp /= 16;
-	}
-
-	/* loop that Iterate over the digits in reverse order */
-	for (int I = num_digits - 1; I >= 0; I--)
-	{
-		buffer[j--] = map_to[num % 16];
+		buffer[i--] = map_to[num % 16];
 		num /= 16;
 	}
-
 	if (flags & F_HASH && init_num != 0)
 	{
 		buffer[I--] = flag_ch;
