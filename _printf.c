@@ -6,13 +6,13 @@ void print_buffer(char buffer[], int *buff_ind);
 
 /**
  * _printf - Printf function
- * @format: string to be inputed
- * Return: number of chars to be printed.
+ * @format: string to be formatted
+ * Return: number of characters printed.
  */
 int _printf(const char *format, ...)
 {
-	int j, printed = 0, printed_chars = 0;
-	int flags, width, precision, size, buff_ind = 0;
+	int i, printed = 0, printed_chars = 0;
+	int width, flags, precision, size, buff_ind = 0;
 	va_list list;
 	char buffer[BUFF_SIZE];
 
@@ -20,13 +20,14 @@ int _printf(const char *format, ...)
 		return (-1);
 	va_start(list, format);
 
-	j = 0;
+	int i = 0;
 
-	while (format[j] != '\0')
+	while (format[i] != '\0')
+
 	{
-		if (format[j] != '%')
+		if (format[i] != '%')
 		{
-			buffer[buff_ind++] = format[j];
+			buffer[buff_ind++] = format[i];
 			if (buff_ind == BUFF_SIZE)
 				print_buffer(buffer, &buff_ind);
 			printed_chars++;
@@ -34,23 +35,23 @@ int _printf(const char *format, ...)
 		else
 		{
 			print_buffer(buffer, &buff_ind);
-			flags = get_flags(format, &j);
-			width = get_width(format, &j, list);
-			precision = get_precision(format, &j, list);
-			size = get_size(format, &j);
+			flags = get_flags(format, &i);
+			width = get_width(format, &i, list);
+			precision = get_precision(format, &i, list);
+			size = get_size(format, &i);
 			++j;
-			printed = handle_print(format, &j, list, buffer,
+			printed = handle_print(format, &i, list, buffer,
 					flags, width, precision, size);
 			if (printed == -1)
 				return (-1);
 			printed_chars += printed;
 		}
-		j++;
+		i++;
 	}
 
 	print_buffer(buffer, &buff_ind);
 
-	va_end(list);
+	a_end(list);
 
 	return (printed_chars);
 }
@@ -58,7 +59,7 @@ int _printf(const char *format, ...)
 /**
  * print_buffer - Prints the contents of the buffer if it exist
  * @buffer: Array of characters
- * @buff_ind: Index at which to add next char, represents the length.
+ * @buff_ind: Pointer to index to add the next char, represents the length
  */
 void print_buffer(char buffer[], int *buff_ind)
 {
