@@ -25,10 +25,11 @@ int print_unsigned(va_list types, char buffer[],
 
 	buffer[BUFF_SIZE - 1] = '\0';
 
-	do {
+	while (num > 0)
+	{
 		buffer[i--] = (num % 10) + '0';
 		num /= 10;
-	} while (num > 0);
+	}
 
 	i++;
 
@@ -64,10 +65,11 @@ int print_octal(va_list types, char buffer[],
 
 	buffer[BUFF_SIZE - 1] = '\0';
 
-	do {
+	while (num > 0)
+	{
 		buffer[i--] = (num % 8) + '0';
 		num /= 8;
-	} while (num > 0);
+	}
 
 	if (flags & F_HASH && init_num != 0)
 		buffer[i--] = '0';
