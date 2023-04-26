@@ -1,6 +1,4 @@
 #include "main.h"
-#include <stdlib.h>
-#include <stdio.h>
 /**
  * print_char - a function that prints a char
  * @types: types of arguments
@@ -11,13 +9,14 @@
  * @size: size of function
  * Return: chars
  */
-int print_char(va_list types, char buffer[], 
+int print_char(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
-	char x = va_arg(types, int);
+	char c = va_arg(types, int);
 
-	return (handle_write_char(x, buffer, flags, width, precision, size));
+	return (handle_write_char(c, buffer, flags, width, precision, size));
 }
+
 /**
  * print_string - a function that prints a string
  * @types: types of arguments
@@ -32,7 +31,7 @@ int print_string(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
 	char *str = va_arg(types, char *);
-	int k = 0;
+	int length = 0;
 	int i;
 
 	UNUSED(width);
@@ -41,36 +40,36 @@ int print_string(va_list types, char buffer[],
 	UNUSED(size);
 	UNUSED(flags);
 
-	if (!str)
+	if (str == NULL)
 	{
-		str = precision >= 6 ? "      " : "(null)";
+		str = "(null)";
+		if (precision >= 6)
+			str = "      ";
 	}
-	while (str[k] != '\0')
-		k++;
-	if (precision >= 0)
-	{
-		k = (precision < k) ? precision : k;
-	}
-	i = 0;
 
-	if (width > k)
+	while (str[length] != '\0')
+		length++;
+
+	if (precision >= 0 && precision < length)
+		length = precision;
+
+	if (width > length)
 	{
 		if (flags & F_MINUS)
 		{
-			write(1, &str[0], k);
-			for (i = width - k; i > 0; i--)
+			write(1, &str[0], length);
+			for (i = width - length; i > 0; i--)
 				write(1, " ", 1);
 			return (width);
 		}
 		else
 		{
-			i = width - k;
-			for (i = width - k; i > 0; i--)
+			for (i = width - length; i > 0; i--)
 				write(1, " ", 1);
-			write(1, &str[0], k);
+			write(1, &str[0], length);
 			return (width);
 		}
-	} return (write(1, str, k));
+	} return (write(1, str, length));
 }
 /**
  * print_percent - a function that prints a percent
@@ -83,7 +82,7 @@ int print_string(va_list types, char buffer[],
  * Return: percent
  */
 int print_percent(va_list types, char buffer[],
-	       int flags, int width, int precision, int size)
+		int flags, int width, int precision, int size)
 {
 	UNUSED(width);
 	UNUSED(precision);
@@ -107,28 +106,29 @@ int print_percent(va_list types, char buffer[],
 int print_int(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
-	long int h = va_arg(types, long int);
-	unsigned long int len;
-	int is_negative = 0;
 	int i = BUFF_SIZE - 2;
+	int is_negative = 0;
+	long int n = va_arg(types, long int);
+	unsigned long int num;
 
-	h = convert_size_number(h, size);
+	n = convert_size_number(n, size);
 
-	if (h == 0)
+	if (n == 0)
 		buffer[i--] = '0';
 
 	buffer[BUFF_SIZE - 1] = '\0';
-	len = (unsigned long int)h;
+	num = (unsigned long int)n;
 
-	if (h < 0)
+	if (n < 0)
 	{
-		len = (unsigned long int)((-1) * h);
+		num = (unsigned long int)((-1) * n);
 		is_negative = 1;
 	}
-	while (len > 0)
+
+	while (num > 0)
 	{
-		buffer[i--] = (len % 10) + '0';
-		len /= 10;
+		buffer[i--] = (num % 10) + '0';
+		num /= 10;
 	}
 
 	i++;
@@ -148,40 +148,34 @@ int print_int(va_list types, char buffer[],
 int print_binary(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
+	unsigned int n, m, i, sum;
+	unsigned int a[32];
 	int count;
-	unsigned int g, h, i, add;
-	unsigned int y[32];
 
+	UNUSED(buffer);
+	UNUSED(flags);
 	UNUSED(width);
 	UNUSED(precision);
-	UNUSED(buffer);
 	UNUSED(size);
-	UNUSED(flags);
 
-	h = va_arg(types, unsigned int);
-	g = 2147483648; /* (2 ^ 31) */
-	y[0] = h / g;
-
-	i = 1;
-
-	while (i < 32)
+	n = va_arg(types, unsigned int);
+	m = 2147483648; /* (2 ^ 31) */
+	a[0] = n / m;
+	for (i = 1; i < 32; i++)
 	{
-		g /= 2;
-		y[i] = (h / g) % 2;
-		i++;
+		m /= 2;
+		a[i] = (n / m) % 2;
 	}
-	i = 0, add = 0, count = 0;
-	while (i < 32)
+	for (i = 0, sum = 0, count = 0; i < 32; i++)
 	{
-		add += y[i];
-		if (add || i == 31)
+		sum += a[i];
+		if (sum || i == 31)
 		{
-			char z = '0' + y[i];
+			char z = '0' + a[i];
 
 			write(1, &z, 1);
 			count++;
 		}
-		i++;
 	}
 	return (count);
 }

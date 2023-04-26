@@ -1,9 +1,4 @@
 #include "main.h"
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <ctype.h>
 /**
  * print_pointer - a program that prints a pointer value
  * @types: types of arguments
@@ -17,37 +12,42 @@
 int print_pointer(va_list types, char buffer[], int flags,
 		int width, int precision, int size)
 {
-	unsigned long base_len;
-	void *len = va_arg(types, void *);
-	int result = BUFF_SIZE - 2, k = 2, padd_start = 1;
-	char ext_x = 0, padd = ' ';
+	unsigned long num_addrs;
+	void *addrs = va_arg(types, void *);
+	int ind = BUFF_SIZE - 2, length = 2, padd_start = 1;
+	char extra_c = 0, padd = ' ';
 	char map_to[] = "0123456789abcdef";
 
 	UNUSED(size);
 	UNUSED(width);
 
-	if (len == NULL)
+	if (addrs == NULL)
 		return (write(1, "(nil)", 5));
 	buffer[BUFF_SIZE - 1] = '\0';
 	UNUSED(precision);
 
-	base_len = (unsigned long)len;
+	num_addrs = (unsigned long)addrs;
 
-	for (; base_len > 0; base_len /= 16, result--, k++)
+	while (num_addrs > 0)
 	{
-		buffer[result] = map_to[base_len % 16];
+		buffer[ind--] = map_to[num_addrs % 16];
+		num_addrs /= 16;
+		length++;
 	}
+
 	if ((flags & F_ZERO) && !(flags & F_MINUS))
 		padd = '0';
 	if (flags & F_PLUS)
-		ext_x = '+', k++;
+		extra_c = '+', length++;
 	else if (flags & F_SPACE)
-		ext_x = ' ', k++;
+		extra_c = ' ', length++;
 
-	result++;
-	return (write_pointer(buffer, result, k, width, flags,
-				padd, ext_x, padd_start));
+	ind++;
+
+	return (write_pointer(buffer, ind, length,
+				width, flags, padd, extra_c, padd_start));
 }
+
 /**
  * print_non_printable - a program that prints a non-printable
  * character
@@ -120,9 +120,9 @@ int print_reverse(va_list types, char buffer[], int flags,
 
 	for (i = i - 1; i >= 0; i--)
 	{
-		char d = str[i];
+		char z = str[i];
 
-		write(1, &d, 1);
+		write(1, &z, 1);
 		count++;
 	}
 
@@ -142,7 +142,7 @@ int print_rot13string(va_list types, char buffer[], int flags,
 		int width, int precision, int size)
 {
 	int count = 0;
-	char a;
+	char x;
 	char *str;
 	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
@@ -161,24 +161,24 @@ int print_rot13string(va_list types, char buffer[], int flags,
 	i = 0;
 	j = 0;
 
-	while (str[i] != '\0')
+	for (i = 0; str[i]; i++)
 	{
 		for (j = 0; in[j] != '\0'; j++)
 		{
-			if (str[j] == in[j])
+			if (in[j] == str[i])
 			{
-				a = out[j];
-				write(1, &a, 1);
+				x = out[j];
+				write(1, &x, 1);
 				count++;
 				break;
 			}
 		}
-		i++;
+		if (!in[j])
+		{
+			x = str[i];
+			write(1, &x, 1);
+			count++;
+		}
 	}
-	if (!in[j])
-	{
-		a = str[j];
-		write(1, &a, 1);
-		count++;
-	} return (count);
+	return (count);
 }
