@@ -36,15 +36,27 @@ int _printf(const char *format, ...)
 			}
 			while (get_flag(*p, &flags))
 				p++;
-			pfunc = get_print(*p);
-			count += (pfunc)
-				? pfunc(arguments, &flags)
-				: _printf("%%%c", *p);
-		} else
-			count += _putchar(*p);
-	}
-	_putchar(-1);
-	va_end(arguments);
-	return (count);
+			if (*p == 'r')
+			{
+				/*Assuming 'r' should print the address*/
+				void *addr = va_arg(arguments, void *);
+				count += printf("%p", addr);
+			}
+			else
+			{
+				pfunc = get_print(*p);
+				count += (pfunc)
+					? pfunc(arguments, &flags)
+					: _printf("%%%c", *p);
+			}
+		}
+
+		else
+		{
+		count += _putchar(*p);
+		}
+}
+va_end(arguments);
+return (count);
 
 }
